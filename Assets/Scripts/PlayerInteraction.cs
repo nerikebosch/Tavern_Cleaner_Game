@@ -6,7 +6,7 @@ public class PlayerInteraction : MonoBehaviour
 {
     public CharacterController controller;
     public Transform cam;
-    public float speed = 5f;
+    public float speed = 1f;
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
