@@ -52,6 +52,7 @@ public class BreakableItem : MonoBehaviour
 
         // TODO: Later, we will tell the GameManager to deduct salary here!
         Debug.Log("Bottle Broke! Deducting Salary...");
+        TavernManager.instance.AddPenalty(10.00f);
 
         // 4. If the player is currently holding it with the SpringJoint, break the joint!
         SpringJoint joint = GetComponent<SpringJoint>();
