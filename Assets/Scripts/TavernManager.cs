@@ -126,12 +126,12 @@ public class TavernManager : MonoBehaviour
         if (currentEarnings <= 0)
         {
             gameOverTitleText.text = "Game Over. You lost!";
-            gameOverTitleText.color = Color.white;
+            gameOverTitleText.color = Color.black;
         }
         else
         {
             gameOverTitleText.text = "Shift Complete!";
-            gameOverTitleText.color = Color.white;
+            gameOverTitleText.color = Color.black;
         }
 
         totalPayText.text = "TOTAL PAY: $" + currentEarnings.ToString("F2");
