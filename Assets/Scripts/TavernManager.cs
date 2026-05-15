@@ -15,13 +15,13 @@ public class TavernManager : MonoBehaviour
     public TextMeshProUGUI timerText;
 
     [Header("Game Over UI")]
-    public GameObject gameOverPanel; // The panel we just made
+    public GameObject gameOverPanel;
     public TextMeshProUGUI gameOverTitleText;
-    public TextMeshProUGUI totalPayText; // The final math text
+    public TextMeshProUGUI totalPayText;
 
     [Header("Game Settings")]
-    public float shiftLengthSeconds = 120f; // 2 minutes
-    public AudioSource cashSound; // The Ka-Ching!
+    public float shiftLengthSeconds = 60f;
+    public AudioSource cashSound;
 
     private float currentEarnings = 0f;
     private float timeLeft;
@@ -61,17 +61,17 @@ public class TavernManager : MonoBehaviour
     public void AddMoney(float amount)
     {
         currentEarnings += amount;
-        if (cashSound != null) cashSound.Play(); // Ka-Ching!
+        if (cashSound != null) cashSound.Play();
         UpdateUI();
     }
 
     public void AddPenalty(float amount)
     {
-        // 1. Deduct directly from our main Earnings! (Allows it to go negative)
+        // Deduct directly from our main Earnings
         currentEarnings -= amount;
         UpdateUI();
 
-        // 2. Stop the old animation if it's currently playing, and start a new one
+        // Stop the old animation if it's currently playing, and start a new one
         if (penaltyAnimCoroutine != null) StopCoroutine(penaltyAnimCoroutine);
         penaltyAnimCoroutine = StartCoroutine(SlidePenaltyText(amount));
     }
@@ -83,7 +83,7 @@ public class TavernManager : MonoBehaviour
 
         float slideSpeed = 5f;
         Vector2 hiddenPos = new Vector2(-500, penaltyTextRect.anchoredPosition.y);
-        Vector2 visiblePos = new Vector2(50, penaltyTextRect.anchoredPosition.y); // Adjust 50 to move it further right
+        Vector2 visiblePos = new Vector2(288, penaltyTextRect.anchoredPosition.y);
 
         // Slide In
         float t = 0;
@@ -94,7 +94,7 @@ public class TavernManager : MonoBehaviour
             yield return null;
         }
 
-        // Wait on screen for 2 seconds so the player sees it
+        // Wait on screen for 2 seconds
         yield return new WaitForSeconds(2f);
 
         // Slide Out
@@ -114,7 +114,6 @@ public class TavernManager : MonoBehaviour
 
     void UpdateTimerUI()
     {
-        // Math to make the timer look like a real clock (00:00)
         int minutes = Mathf.FloorToInt(timeLeft / 60);
         int seconds = Mathf.FloorToInt(timeLeft % 60);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
@@ -124,16 +123,15 @@ public class TavernManager : MonoBehaviour
     {
         shiftActive = false;
 
-        // --- WIN / LOSE LOGIC ---
         if (currentEarnings <= 0)
         {
             gameOverTitleText.text = "Game Over. You lost!";
-            gameOverTitleText.color = Color.white; // Turns the text red!
+            gameOverTitleText.color = Color.white;
         }
         else
         {
             gameOverTitleText.text = "Shift Complete!";
-            gameOverTitleText.color = Color.white; // Or whatever color you used
+            gameOverTitleText.color = Color.white;
         }
 
         totalPayText.text = "TOTAL PAY: $" + currentEarnings.ToString("F2");
@@ -142,10 +140,9 @@ public class TavernManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    // The button will trigger this method
     public void ReturnToMainMenu()
     {
-        // Unfreeze the game before leaving, or the Main Menu will be frozen too!
+        // Unfreeze the game before leaving
         Time.timeScale = 1f;
 
         // Destroy the MusicManager so it restarts properly on the Main Menu

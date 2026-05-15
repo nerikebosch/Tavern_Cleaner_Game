@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections; // CRITICAL: This line allows us to use delays (Coroutines)!
+using System.Collections;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -11,23 +11,21 @@ public class MainMenuController : MonoBehaviour
     public float delayBeforeLoad = 0.3f; // How long to wait before loading the scene
 
     [Header("UI Panels")]
-    public GameObject instructionsPanel; // The new instructions pop-up!
+    public GameObject instructionsPanel;
 
     public void StartGame()
     {
-        // 1. Play the sound instantly
         PlayClickSound();
 
-        // 2. Start the timer to delay the scene load
+        // Start the timer to delay the scene load
         StartCoroutine(LoadSceneWithDelay());
     }
 
     IEnumerator LoadSceneWithDelay()
     {
-        // Wait for 0.3 seconds...
         yield return new WaitForSeconds(delayBeforeLoad);
 
-        // ...THEN load the Tavern!
+        // Load the Tavern!
         SceneManager.LoadScene(gameSceneName);
     }
 
@@ -44,7 +42,7 @@ public class MainMenuController : MonoBehaviour
         Application.Quit();
     }
 
-    // A simple function for buttons that don't load scenes (like your Help button)
+    // A simple function for buttons that don't load scenes
     public void PlayClickSound()
     {
         if (clickSound != null)

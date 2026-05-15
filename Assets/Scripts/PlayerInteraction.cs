@@ -69,7 +69,6 @@ public class PlayerInteraction : MonoBehaviour
 
     void Update()
     {
-        // === 1. ALWAYS RUN MOVEMENT & GRAVITY ===
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0) { velocity.y = -2f; }
 
@@ -95,7 +94,6 @@ public class PlayerInteraction : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        // === 2. INTERACTION LOGIC ===
         if (heldItem == null)
         {
             FindInteractable();
@@ -119,18 +117,15 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    // --- NEW BEZIER CURVE MATH ---
     void DrawCurvedLine()
     {
         if (lineRenderer == null || heldItem == null) return;
 
         lineRenderer.enabled = true;
 
-        // 1. Start at the chest (up 1.2f), AND push it forward (0.5f) so it starts near the hand!
-        // Pushes it up to chest level (1.2f), further forward (0.8f), and slightly to the right (0.3f) near the hand!
+        // Pushes it up to chest level (1.5f), further forward (0.8f), and slightly to the right (0.3f) near the hand
         Vector3 startPos = transform.position + (Vector3.up * 1.5f) + (transform.forward * 0.8f) + (transform.right * 0.3f);
 
-        // 2. THE PIVOT FIX: Ask the Collider where the TRUE physical center is!
         Collider itemCollider = heldItem.GetComponent<Collider>();
         Vector3 endPos;
         if (itemCollider != null)
@@ -142,7 +137,7 @@ public class PlayerInteraction : MonoBehaviour
             endPos = heldItem.transform.position;
         }
 
-        // 3. Find the middle point and push it UP to make the arc
+        // Find the middle point and push it up to make the arc
         Vector3 midPoint = startPos + (endPos - startPos) / 2f + (Vector3.up * lineSagAmount);
 
         // Calculate all 15 points along the curve
@@ -156,7 +151,6 @@ public class PlayerInteraction : MonoBehaviour
 
     Vector3 CalculateQuadraticBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2)
     {
-        // This is the standard math formula for a curved line
         float u = 1 - t;
         float tt = t * t;
         float uu = u * u;
@@ -192,8 +186,7 @@ public class PlayerInteraction : MonoBehaviour
         currentJoint = heldItem.AddComponent<SpringJoint>();
         currentJoint.connectedBody = holdPoint;
 
-        // UPDATED PHYSICS FOR BETTER FEEL
-        currentJoint.spring = 50f;  // Snaps to the front faster
+        currentJoint.spring = 50f;
         currentJoint.damper = 5f;
         currentJoint.maxDistance = 0f;
         currentJoint.autoConfigureConnectedAnchor = false;
@@ -202,7 +195,7 @@ public class PlayerInteraction : MonoBehaviour
 
         itemRb.mass = 0.1f;
         itemRb.constraints = RigidbodyConstraints.FreezeRotation;
-        itemRb.linearDamping = 5f; // Less air drag so it doesn't lag far behind you
+        itemRb.linearDamping = 5f;
     }
 
     void DropItem()

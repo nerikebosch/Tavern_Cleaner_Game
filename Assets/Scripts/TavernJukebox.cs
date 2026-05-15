@@ -14,11 +14,10 @@ public class TavernJukebox : MonoBehaviour
 
     void Awake()
     {
-        // 1. The "DontDestroyOnLoad" Trick!
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this object alive when switching scenes!
+            DontDestroyOnLoad(gameObject); // Keep this object alive when switching scenes
         }
         else
         {
@@ -41,7 +40,7 @@ public class TavernJukebox : MonoBehaviour
 
     void Update()
     {
-        // 2. Check if the song has finished playing
+        // Check if the song has finished playing
         if (!audioSource.isPlaying && playlist.Length > 0)
         {
             currentTrackIndex++; // Move to the next song

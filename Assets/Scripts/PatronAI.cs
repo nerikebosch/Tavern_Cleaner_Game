@@ -8,7 +8,6 @@ public class PatronAI : MonoBehaviour
 
     private NavMeshAgent agent;
 
-    // 1. We changed this to an Array [] so it can hold multiple Animators!
     private Animator[] animators;
     private float timer;
 
@@ -16,8 +15,6 @@ public class PatronAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        // 2. Notice the "s" in GetComponents! This searches the entire Prefab 
-        // and collects the Animator from the Head, Arms, Torso, etc., into a list.
         animators = GetComponentsInChildren<Animator>();
 
         timer = waitTimer;
@@ -25,10 +22,9 @@ public class PatronAI : MonoBehaviour
 
     void Update()
     {
-        // 3. We check how fast the NavMesh Agent is moving...
+        //Check how fast the NavMesh Agent is moving
         float currentSpeed = agent.velocity.magnitude;
 
-        // 4. ...and we loop through EVERY body part, telling them all to move at that speed!
         if (animators != null && animators.Length > 0)
         {
             foreach (Animator anim in animators)
@@ -49,7 +45,7 @@ public class PatronAI : MonoBehaviour
         }
     }
 
-    // This math perfectly finds a random, valid point on your blue NavMesh
+    // Find a random, valid point on your blue NavMesh
     public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
     {
         Vector3 randDirection = Random.insideUnitSphere * dist;

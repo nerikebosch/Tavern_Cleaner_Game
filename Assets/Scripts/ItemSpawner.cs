@@ -32,7 +32,7 @@ public class ItemSpawner : MonoBehaviour
                 int randomIndex = Random.Range(0, itemPrefabs.Length);
                 GameObject itemToSpawn = itemPrefabs[randomIndex];
 
-                // Spawn the chosen item at this exact point!
+                // Spawn the chosen item at this exact point
                 Instantiate(itemToSpawn, point.position, point.rotation);
             }
         }

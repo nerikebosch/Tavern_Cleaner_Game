@@ -2058,7 +2058,7 @@ Transform:
   m_GameObject: {fileID: 350264394}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 5.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2387,7 +2387,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2667,7 +2667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5067,7 +5067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7385,7 +7385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8345,7 +8345,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 1737728458}
   gameOverTitleText: {fileID: 1596307971}
   totalPayText: {fileID: 224954507}
-  shiftLengthSeconds: 120
+  shiftLengthSeconds: 60
   cashSound: {fileID: 1386757793}
 --- !u!82 &1386757793
 AudioSource:
@@ -8459,6 +8459,7 @@ MonoBehaviour:
   patronPrefabs:
   - {fileID: 2954031838241223919, guid: 561fea30b08af0f4191f4bc974c84aee, type: 3}
   - {fileID: 6604355341189349892, guid: c2cfb3fa4372fe544839da1d5504f3c3, type: 3}
+  - {fileID: 1759117536421687973, guid: c5960ba843593714ea504ca1d682fa97, type: 3}
   spawnPoints:
   - {fileID: 1279641281}
   - {fileID: 2007216705}
@@ -9916,7 +9917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.16
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ab350fe332834c84087fe76b040f34a1, type: 3}
       propertyPath: m_LocalPosition.z

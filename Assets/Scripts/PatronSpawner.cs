@@ -16,7 +16,7 @@ public class PatronSpawner : MonoBehaviour
 
     void SpawnRandomPatrons()
     {
-        // Create a temporary list of our 5 prefabs so we can pick from them
+        // Create a temporary list of the prefabs so we can pick from them
         List<GameObject> availablePatrons = new List<GameObject>(patronPrefabs);
 
         for (int i = 0; i < spawnPoints.Length; i++)
@@ -30,7 +30,7 @@ public class PatronSpawner : MonoBehaviour
             // Spawn them at the spawn point
             Instantiate(chosenPatron, spawnPoints[i].position, spawnPoints[i].rotation);
 
-            // Remove them from the available list so we don't spawn twins!
+            // Remove them from the available list so we don't spawn twins
             availablePatrons.RemoveAt(randomIndex);
         }
     }
