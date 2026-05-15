@@ -21,9 +21,14 @@ public class BreakableItem : MonoBehaviour
     {
         meshRenderer = GetComponent<MeshRenderer>();
         itemCollider = GetComponent<Collider>();
-
-        // Record the exact time this bottle was created
         spawnTime = Time.time;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            // This pushes the weight to the very bottom of the bottle
+            rb.centerOfMass = new Vector3(0, -0.5f, 0);
+        }
     }
 
     void OnCollisionEnter(Collision collision)
