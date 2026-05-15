@@ -19,6 +19,10 @@ public class TavernManager : MonoBehaviour
     public TextMeshProUGUI gameOverTitleText;
     public TextMeshProUGUI totalPayText;
 
+    [Header("Pause Menu")]
+    public GameObject pauseMenuPanel;
+    private bool isPaused = false;
+
     [Header("Game Settings")]
     public float shiftLengthSeconds = 60f;
     public AudioSource cashSound;
@@ -44,6 +48,16 @@ public class TavernManager : MonoBehaviour
 
     void Update()
     {
+        if (UnityEngine.InputSystem.Keyboard.current != null &&
+            UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // If the shift is over, don't let them pause
+            if (!shiftActive) return;
+
+            if (isPaused) ResumeGame();
+            else PauseGame();
+        }
+
         if (!shiftActive) return;
 
         // Count down the timer
@@ -138,6 +152,20 @@ public class TavernManager : MonoBehaviour
 
         gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
+    }
+
+    public void PauseGame()
+    {
+        isPaused = true;
+        pauseMenuPanel.SetActive(true);
+        Time.timeScale = 0f; // Freezes the game world completely
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        pauseMenuPanel.SetActive(false);
+        Time.timeScale = 1f; // Unfreezes the game
     }
 
     public void ReturnToMainMenu()
