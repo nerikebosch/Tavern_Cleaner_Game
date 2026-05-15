@@ -3,8 +3,8 @@ using UnityEngine;
 public class BreakableItem : MonoBehaviour
 {
     [Header("Breaking Physics")]
-    [Tooltip("How hard it needs to hit something to break. 3 is a good starting point!")]
-    public float breakForceThreshold = 5f;
+    [Tooltip("How hard it needs to hit something to break. Try 8 or 10!")]
+    public float breakForceThreshold = 8f;
 
     [Header("Effects")]
     public AudioSource breakSound;
@@ -14,22 +14,34 @@ public class BreakableItem : MonoBehaviour
     private MeshRenderer meshRenderer;
     private Collider itemCollider;
 
+    // NEW: A timer to stop it from breaking the moment it spawns
+    private float spawnTime;
+
     void Start()
     {
-        // Grab the components on the bottle
         meshRenderer = GetComponent<MeshRenderer>();
         itemCollider = GetComponent<Collider>();
+
+        // Record the exact time this bottle was created
+        spawnTime = Time.time;
     }
 
-    // Unity automatically calls this when the Rigidbody hits anything
     void OnCollisionEnter(Collision collision)
     {
-        if (isBroken) return; // Stop if it's already broken
+        if (isBroken) return;
+
+        // 1. THE SPAWN FIX: If the bottle has existed for less than 1 second, ignore all collisions!
+        if (Time.time - spawnTime < 1.0f) return;
+
+        // 2. THE PICK-UP FIX: If the bottle bumps into the Waiter, ignore it!
+        if (collision.gameObject.CompareTag("Player")) return;
 
         // Measure how hard the impact was
         float impactForce = collision.relativeVelocity.magnitude;
 
-        // If the impact is harder than our threshold...
+        // PRO-TIP: This will print the force in your console so you can see exactly how hard it hit!
+        Debug.Log(gameObject.name + " hit something with a force of: " + impactForce);
+
         if (impactForce >= breakForceThreshold)
         {
             Shatter();
@@ -40,28 +52,21 @@ public class BreakableItem : MonoBehaviour
     {
         isBroken = true;
 
-        // 1. Play the sound!
         if (breakSound != null) breakSound.Play();
-
-        // 2. Explode the glass chunks!
         if (shatterParticles != null) shatterParticles.Play();
 
-        // 3. Make the intact bottle invisible and turn off its physics
         meshRenderer.enabled = false;
         itemCollider.enabled = false;
 
-        // TODO: Later, we will tell the GameManager to deduct salary here!
-        Debug.Log("Bottle Broke! Deducting Salary...");
-        TavernManager.instance.AddPenalty(10.00f);
-
-        // 4. If the player is currently holding it with the SpringJoint, break the joint!
-        SpringJoint joint = GetComponent<SpringJoint>();
-        if (joint != null)
+        // If you have your TavernManager setup, this deducts the money!
+        if (TavernManager.instance != null)
         {
-            Destroy(joint);
+            TavernManager.instance.AddPenalty(10.00f);
         }
 
-        // 5. Finally, permanently delete the object 2 seconds later (gives time for the sound to finish)
+        SpringJoint joint = GetComponent<SpringJoint>();
+        if (joint != null) Destroy(joint);
+
         Destroy(gameObject, 2f);
     }
 }

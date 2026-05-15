@@ -23,6 +23,8 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("Visuals")]
     public LineRenderer lineRenderer;
+    [Tooltip("How much the magical line sags downwards")]
+    public float lineSagAmount = 0.5f;
 
     private Animator[] animators;
     private GameObject currentTarget;
@@ -50,6 +52,12 @@ public class PlayerInteraction : MonoBehaviour
             .With("Left", "<Keyboard>/a")
             .With("Right", "<Keyboard>/d");
         moveAction.Enable();
+
+        // Prepare the line renderer for a smooth curve
+        if (lineRenderer != null)
+        {
+            lineRenderer.positionCount = 15; // 15 points makes a very smooth curve
+        }
     }
 
     void OnDestroy()
@@ -88,20 +96,17 @@ public class PlayerInteraction : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         // === 2. INTERACTION LOGIC ===
-        if (heldItem == null) // NOT HOLDING
+        if (heldItem == null)
         {
             FindInteractable();
             if (currentTarget != null && interactAction.triggered) PickUpItem();
         }
-        else // HOLDING AN ITEM
+        else
         {
             interactText.gameObject.SetActive(false);
-            if (lineRenderer != null)
-            {
-                lineRenderer.enabled = true;
-                lineRenderer.SetPosition(0, holdPoint.position);
-                lineRenderer.SetPosition(1, heldItem.transform.position);
-            }
+
+            // Draw the curved magical line
+            DrawCurvedLine();
 
             if (dropAction.triggered)
             {
@@ -114,7 +119,52 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    // ... (Keep your FindInteractable, PickUpItem, and DropItem methods exactly the same below this line)
+    // --- NEW BEZIER CURVE MATH ---
+    void DrawCurvedLine()
+    {
+        if (lineRenderer == null || heldItem == null) return;
+
+        lineRenderer.enabled = true;
+
+        // 1. Start at the chest (up 1.2f), AND push it forward (0.5f) so it starts near the hand!
+        // Pushes it up to chest level (1.2f), further forward (0.8f), and slightly to the right (0.3f) near the hand!
+        Vector3 startPos = transform.position + (Vector3.up * 1.5f) + (transform.forward * 0.8f) + (transform.right * 0.3f);
+
+        // 2. THE PIVOT FIX: Ask the Collider where the TRUE physical center is!
+        Collider itemCollider = heldItem.GetComponent<Collider>();
+        Vector3 endPos;
+        if (itemCollider != null)
+        {
+            endPos = itemCollider.bounds.center;
+        }
+        else
+        {
+            endPos = heldItem.transform.position;
+        }
+
+        // 3. Find the middle point and push it UP to make the arc
+        Vector3 midPoint = startPos + (endPos - startPos) / 2f + (Vector3.up * lineSagAmount);
+
+        // Calculate all 15 points along the curve
+        for (int i = 0; i < lineRenderer.positionCount; i++)
+        {
+            float t = i / (float)(lineRenderer.positionCount - 1);
+            Vector3 pointOnCurve = CalculateQuadraticBezierPoint(t, startPos, midPoint, endPos);
+            lineRenderer.SetPosition(i, pointOnCurve);
+        }
+    }
+
+    Vector3 CalculateQuadraticBezierPoint(float t, Vector3 p0, Vector3 p1, Vector3 p2)
+    {
+        // This is the standard math formula for a curved line
+        float u = 1 - t;
+        float tt = t * t;
+        float uu = u * u;
+        Vector3 p = uu * p0;
+        p += 2 * u * t * p1;
+        p += tt * p2;
+        return p;
+    }
 
     void FindInteractable()
     {
@@ -142,8 +192,9 @@ public class PlayerInteraction : MonoBehaviour
         currentJoint = heldItem.AddComponent<SpringJoint>();
         currentJoint.connectedBody = holdPoint;
 
-        currentJoint.spring = 15f;
-        currentJoint.damper = 2f;
+        // UPDATED PHYSICS FOR BETTER FEEL
+        currentJoint.spring = 50f;  // Snaps to the front faster
+        currentJoint.damper = 5f;
         currentJoint.maxDistance = 0f;
         currentJoint.autoConfigureConnectedAnchor = false;
         currentJoint.connectedAnchor = Vector3.zero;
@@ -151,7 +202,7 @@ public class PlayerInteraction : MonoBehaviour
 
         itemRb.mass = 0.1f;
         itemRb.constraints = RigidbodyConstraints.FreezeRotation;
-        itemRb.linearDamping = 15f;
+        itemRb.linearDamping = 5f; // Less air drag so it doesn't lag far behind you
     }
 
     void DropItem()

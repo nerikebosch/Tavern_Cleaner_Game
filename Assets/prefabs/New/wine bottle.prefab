@@ -5153,7 +5153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581b63cfa5acd3d418aac9cee0b5a876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakableItem
-  breakForceThreshold: 3
+  breakForceThreshold: 4
   breakSound: {fileID: 6880494002755613247}
   shatterParticles: {fileID: 4200890656448210829}
 --- !u!4 &3207571942816748958 stripped

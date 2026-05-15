@@ -10,6 +10,9 @@ public class MainMenuController : MonoBehaviour
     public AudioSource clickSound; // The sound we want to play
     public float delayBeforeLoad = 0.3f; // How long to wait before loading the scene
 
+    [Header("UI Panels")]
+    public GameObject instructionsPanel; // The new instructions pop-up!
+
     public void StartGame()
     {
         // 1. Play the sound instantly
@@ -48,5 +51,17 @@ public class MainMenuController : MonoBehaviour
         {
             clickSound.Play();
         }
+    }
+
+    public void OpenInstructions()
+    {
+        PlayClickSound();
+        instructionsPanel.SetActive(true); // Turn the panel on
+    }
+
+    public void CloseInstructions()
+    {
+        PlayClickSound();
+        instructionsPanel.SetActive(false); // Turn the panel off
     }
 }
